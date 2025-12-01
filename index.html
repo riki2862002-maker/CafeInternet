@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Cibercafé</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">CiberCafé Manager</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-tab="dashboard">Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-tab="sessions">Sesiones</a></li>
+                        <li><a href="#" class="nav-link" data-tab="machines">Máquinas</a></li>
+                        <li><a href="#" class="nav-link" data-tab="reports">Reportes</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="alert-container"></div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Resumen del Día</h2>
+                </div>
+                <div class="card-body">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Sesiones Activas</h3>
+                            <p id="active-sessions">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Ingresos del Día</h3>
+                            <p id="daily-income">$0.00</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Máquinas Disponibles</h3>
+                            <p id="available-machines">0/10</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Impresiones Hoy</h3>
+                            <p id="today-prints">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Sesiones Activas</h2>
+                </div>
+                <div class="card-body">
+                    <table id="active-sessions-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Máquina</th>
+                                <th>Inicio</th>
+                                <th>Tiempo Transcurrido</th>
+                                <th>Costo Actual</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Las sesiones activas se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sessions Tab -->
+        <div id="sessions" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Registrar Nueva Sesión</h2>
+                </div>
+                <div class="card-body">
+                    <form id="session-form">
+                        <div class="form-group">
+                            <label for="client-name">Nombre del Cliente</label>
+                            <input type="text" id="client-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="machine-select">Máquina</label>
+                            <select id="machine-select" required>
+                                <!-- Las máquinas disponibles se cargarán aquí -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-success">Iniciar Sesión</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Finalizar Sesión</h2>
+                </div>
+                <div class="card-body">
+                    <form id="end-session-form">
+                        <div class="form-group">
+                            <label for="session-select">Seleccionar Sesión Activa</label>
+                            <select id="session-select" required>
+                                <!-- Las sesiones activas se cargarán aquí -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3>Impresiones</h3>
+                            <div class="form-group">
+                                <label for="bw-prints">Impresiones Blanco y Negro</label>
+                                <input type="number" id="bw-prints" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="color-prints">Impresiones a Color</label>
+                                <input type="number" id="color-prints" min="0" value="0">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-danger">Finalizar Sesión</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Historial de Sesiones</h2>
+                </div>
+                <div class="card-body">
+                    <table id="sessions-history">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Máquina</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Impresiones B/N</th>
+                                <th>Impresiones Color</th>
+                                <th>Costo Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- El historial se cargará aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Machines Tab -->
+        <div id="machines" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Estado de las Máquinas</h2>
+                </div>
+                <div class="card-body">
+                    <div class="machine-grid" id="machines-grid">
+                        <!-- Las máquinas se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generar Reporte</h2>
+                </div>
+                <div class="card-body">
+                    <form id="report-form">
+                        <div class="form-group">
+                            <label for="report-type">Tipo de Reporte</label>
+                            <select id="report-type">
+                                <option value="daily">Diario</option>
+                                <option value="weekly">Semanal</option>
+                                <option value="monthly">Mensual</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="custom-date-range" style="display: none;">
+                            <label for="start-date">Fecha de Inicio</label>
+                            <input type="date" id="start-date">
+                            <label for="end-date">Fecha de Fin</label>
+                            <input type="date" id="end-date">
+                        </div>
+                        <button type="submit" class="btn-success">Generar Reporte</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Sistema de Gestión para Cibercafé &copy; 2025</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
