@@ -1,9 +1,9 @@
 // main.js
-import { UI } from './ui.js';
-import { Sessions } from './sessions.js';
-import { Machines } from './machines.js';
-import { Pricing } from './pricing.js';
-import { Reports } from './reports.js';
+import { UI } from 'ui.js';
+import { Sessions } from 'sessions.js';
+import { Machines } from 'machines.js';
+import { Pricing } from 'pricing.js';
+import { Reports } from 'reports.js';
 Reports.init();
 
 const REFRESH_INTERVAL = 1000;
@@ -218,3 +218,4 @@ function initApp() {
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
+
