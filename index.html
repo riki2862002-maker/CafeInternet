@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cibercafé Manager - Nuevo Diseño</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- CONTENEDOR DE MENSAJES -->
+  <div id="mensajes" class="fixed top-4 right-4 z-50"></div>
+
+  <!-- MODAL PARA FINALIZAR SESIÓN -->
+  <div id="modal-fondo" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+
+  <div id="modal-finalizar" class="fixed inset-0 flex items-center justify-center hidden">
+    <div id="modal-contenido" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+
+      <h2 class="text-xl font-bold mb-4">Finalizar Sesión</h2>
+
+      <label class="block font-semibold mt-2">Tiempo (minutos)</label>
+      <input id="fin-tiempo" type="number" min="0" class="w-full p-2 border rounded">
+
+      <label class="block font-semibold mt-2">Copias B/N</label>
+      <input id="fin-copias-bn" type="number" min="0" class="w-full p-2 border rounded">
+
+      <label class="block font-semibold mt-2">Copias Color</label>
+      <input id="fin-copias-color" type="number" min="0" class="w-full p-2 border rounded">
+
+      <p class="mt-4 font-bold text-lg">Total: $<span id="fin-total">0</span></p>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button id="btn-cancelar-finalizar" class="px-4 py-2 bg-gray-400 text-white rounded">Cancelar</button>
+        <button id="btn-confirmar-finalizar" class="px-4 py-2 bg-green-600 text-white rounded">Confirmar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="bg-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-indigo-600">Cibercafé Manager</h1>
+      <nav>
+        <ul class="flex gap-6 text-gray-700 font-medium">
+          <li><a data-tab="dashboard" class="tab-btn hover:text-indigo-600 cursor-pointer">Dashboard</a></li>
+          <li><a data-tab="sessions" class="tab-btn hover:text-indigo-600 cursor-pointer">Sesiones</a></li>
+          <li><a data-tab="machines" class="tab-btn hover:text-indigo-600 cursor-pointer">Máquinas</a></li>
+          <li><a data-tab="reports" class="tab-btn hover:text-indigo-600 cursor-pointer">Reportes</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl mx-auto px-4 py-6">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="tab-section">
+      <h2 class="text-3xl font-semibold mb-6 text-gray-800">Resumen del Día</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="text-lg font-semibold text-gray-600">Sesiones Activas</h3>
+          <p id="active-sessions" class="text-3xl font-bold text-indigo-600">0</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="text-lg font-semibold text-gray-600">Ingresos del Día</h3>
+          <p id="daily-income" class="text-3xl font-bold text-indigo-600">$0.00</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="text-lg font-semibold text-gray-600">Máquinas Disponibles</h3>
+          <p id="available-machines" class="text-3xl font-bold text-indigo-600">0/10</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="text-lg font-semibold text-gray-600">Impresiones del Día</h3>
+          <p id="today-prints" class="text-3xl font-bold text-indigo-600">0</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Sesiones Activas</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-indigo-600 text-white">
+              <tr>
+                <th class="p-3">Máquina</th>
+                <th class="p-3">Inicio</th>
+                <th class="p-3">Tiempo</th>
+                <th class="p-3">Costo</th>
+              </tr>
+            </thead>
+            <tbody id="active-sessions-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SESIONES -->
+    <section id="sessions" class="tab-section hidden">
+      <h2 class="text-3xl font-semibold mb-6 text-gray-800">Gestión de Sesiones</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- INICIAR SESIÓN -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Registrar Nueva Sesión</h3>
+          <form id="session-form" class="space-y-4">
+
+            <div>
+              <label class="font-medium">Máquina</label>
+              <select id="machine-select" class="w-full p-2 border rounded-md"></select>
+            </div>
+
+            <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md">Iniciar Sesión</button>
+          </form>
+        </div>
+
+        <!-- FINALIZAR SESIÓN -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Finalizar Sesión</h3>
+          <form id="end-session-form" class="space-y-4">
+            <div>
+              <label class="font-medium">Sesión Activa</label>
+              <select id="session-select" class="w-full p-2 border rounded-md"></select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="font-medium">B/N</label>
+                <input id="copias-bn" type="number" value="0" min="0" class="w-full p-2 border rounded-md" />
+              </div>
+              <div>
+                <label class="font-medium">Color</label>
+                <input id="copias-color" type="number" value="0" min="0" class="w-full p-2 border rounded-md" />
+              </div>
+            </div>
+
+            <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md">Finalizar Sesión</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="bg-white p-6 rounded-xl shadow-md mt-8">
+        <h3 class="text-xl font-semibold mb-4">Historial de Sesiones</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse text-left">
+            <thead class="bg-indigo-600 text-white">
+              <tr>
+                <th class="p-3">Máquina</th>
+                <th class="p-3">Inicio</th>
+                <th class="p-3">Fin</th>
+                <th class="p-3">B/N</th>
+                <th class="p-3">Color</th>
+                <th class="p-3">Costo</th>
+                <th class="p-3 text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-history"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÁQUINAS -->
+    <section id="machines" class="tab-section hidden">
+      <h2 class="text-3xl font-semibold mb-6 text-gray-800">Estado de las Máquinas</h2>
+
+      <!-- ESTE ES EL ELEMENTO QUE ui.js NECESITA -->
+      <div id="contenedor-maquinas" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- REPORTES -->
+    <section id="reports" class="tab-section hidden">
+      <h2 class="text-3xl font-semibold mb-6 text-gray-800">Generar Reportes</h2>
+
+      <div class="bg-white p-6 rounded-xl shadow-md max-w-md">
+        <form id="report-form" class="space-y-4">
+          <div>
+            <label class="font-medium">Tipo de Reporte</label>
+            <select id="report-type" class="w-full p-2 border rounded-md">
+              <option value="daily">Diario</option>
+              <option value="weekly">Semanal</option>
+              <option value="monthly">Mensual</option>
+            </select>
+          </div>
+
+          <div id="custom-date-range" class="hidden space-y-2">
+            <input type="date" id="start-date" class="w-full p-2 border rounded-md" />
+            <input type="date" id="end-date" class="w-full p-2 border rounded-md" />
+          </div>
+
+          <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md">Generar Reporte</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-gray-800 text-white text-center py-4 mt-10">
+    Sistema de Gestión para Cibercafé © 2025
+  </footer>
+
+  <script>
+    // Cambio de pestañas
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.tab-section');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sections.forEach(sec => sec.classList.add('hidden'));
+        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+      });
+    });
+  </script>
+
+  <!-- Módulo JS principal -->
+  <script type="module" src="./js/index.js"></script>
+
+</body>
+</html>
